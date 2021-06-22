@@ -25,8 +25,6 @@ contract Token is Auth {
 
     event Approval(address indexed src, address indexed guy, uint amt);
     event Transfer(address indexed src, address indexed dst, uint amt);
-    event Mint(address indexed usr, uint amt);
-    event Burn(address indexed usr, uint amt);
 
     // --- init ---
 
@@ -39,12 +37,12 @@ contract Token is Auth {
 
     function mint(address usr, uint amt) external auth {
         balanceOf[usr] += amt;
-        emit Mint(usr, amt);
+        emit Transfer(address(0), usr, amt);
     }
 
     function burn(address usr, uint amt) external auth {
         balanceOf[usr] -= amt;
-        emit Burn(usr, amt);
+        emit Transfer(usr, address(0), amt);
     }
 
     // --- erc20 ---
@@ -57,10 +55,10 @@ contract Token is Auth {
         require(balanceOf[src] >= amt, "token/insufficient-balance");
         if (src != msg.sender && allowance[src][msg.sender] != type(uint).max) {
             require(allowance[src][msg.sender] >= amt, "token/insufficient-allowance");
-            allowance[src][msg.sender] = allowance[src][msg.sender] - amt;
+            allowance[src][msg.sender] -= amt;
         }
-        balanceOf[src] = balanceOf[src] - amt;
-        balanceOf[dst] = balanceOf[dst] + amt;
+        balanceOf[src] -= amt;
+        balanceOf[dst] += amt;
         emit Transfer(src, dst, amt);
         return true;
     }
@@ -92,10 +90,6 @@ contract Token is Auth {
 
     function DOMAIN_SEPARATOR() public view returns (bytes32) {
         bytes32 domainTypehash = keccak256("EIP712Domain(string name,uint256 chainId,address verifyingContract)");
-        return keccak256(abi.encode(domainTypehash, keccak256(bytes(name)), chainid(), address(this)));
-    }
-
-    function chainid() internal view returns (uint256 id) {
-        assembly { id := chainid() }
+        return keccak256(abi.encode(domainTypehash, keccak256(bytes(name)), block.chainid, address(this)));
     }
 }
