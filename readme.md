@@ -7,6 +7,7 @@ A simplified and modernized dappsys contract library.
 - `token.sol`: a minimal mintable / burnable erc20 with `permit`
 - `proxy.sol`: DSProxy rewritten to use a `create2` based cache
 - `delay.sol`: a simplified `ds-pause`
+- `value.sol`: `DSValue` without `DSThing`
 
 ## Development
 
