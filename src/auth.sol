@@ -2,7 +2,7 @@
 pragma solidity ^0.8.4;
 
 contract Auth {
-    mapping (address => bool) wards;
+    mapping (address => bool) public wards;
 
     event Rely(address usr);
     event Deny(address usr);

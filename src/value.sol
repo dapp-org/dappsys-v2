@@ -6,8 +6,8 @@ contract Value is Auth {
 
     // --- data ---
 
-    bool    has;
-    bytes32 val;
+    bool    public has;
+    bytes32 public val;
 
     // --- logs ---
 
