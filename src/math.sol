@@ -17,6 +17,7 @@ contract Math {
 
     uint constant WAD = 10 ** 18;
     uint constant RAY = 10 ** 27;
+    uint constant RAD = 10 ** 45;
 
     //rounds to zero if x*y < WAD / 2
     function wmul(uint x, uint y) internal pure returns (uint z) {

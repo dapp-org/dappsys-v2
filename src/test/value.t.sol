@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.4;
 
-import {Value} from "./value.sol";
+import {Value} from "../value.sol";
 import {DSTest} from "ds-test/test.sol";
 
 contract TestValue is DSTest {
