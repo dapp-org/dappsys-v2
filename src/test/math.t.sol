@@ -49,28 +49,13 @@ contract TestMath is Math, DSTest {
     }
 
     /*
-       tests rpow against a naive implementation (repeated multiplication)
+       tests rpow for a base of 1
     */
-    function testRpow(uint8 x, uint8 n) public {
-        compareRpow(x, n, WAD);
-        compareRpow(x, n, RAY);
-        compareRpow(x, n, RAD);
-    }
-    function compareRpow(uint8 x, uint8 n, uint b) public {
-        uint naive = b;
-        if (x == 0) {
-            naive = n == 0 ? b : 0;
-        } else {
-            for (uint i = 0; i <= n; i++) {
-                // ignore cases where we overflow here
-                unchecked { if (naive * x < naive) return; }
-                unchecked { if ((naive * x) + (b / 2) < (naive * x)) return; }
+    function testRpow(uint8 _x, uint8 _n) public {
+        // avoid overflow
+        uint x = _x % 50;
+        uint n = _n % 50;
 
-                // multiply and account for rounding
-                naive = ((naive * x) + (b / 2)) / b;
-            }
-        }
-
-        assertEq(rpow(x, n, b), naive);
+        assertEq(rpow(x, n, 1), x ** n);
     }
 }
