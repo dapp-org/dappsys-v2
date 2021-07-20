@@ -7,9 +7,10 @@ contract Token is Auth {
 
     // --- data ---
 
-    string  public constant name = "Token";
-    string  public constant symbol = "TKN";
+    string  public name;
+    string  public symbol;
     uint8   public constant decimals = 18;
+
     uint256 public totalSupply;
 
     mapping (address => uint)                      public balanceOf;
@@ -28,7 +29,9 @@ contract Token is Auth {
 
     // --- init ---
 
-    constructor() {
+    constructor(string memory _name, string memory _symbol) {
+        name = _name;
+        symbol = _symbol;
         wards[msg.sender] = true;
         emit Rely(msg.sender);
     }
@@ -37,11 +40,13 @@ contract Token is Auth {
 
     function mint(address usr, uint amt) external auth {
         balanceOf[usr] += amt;
+        totalSupply    += amt;
         emit Transfer(address(0), usr, amt);
     }
 
     function burn(address usr, uint amt) external auth {
         balanceOf[usr] -= amt;
+        totalSupply    -= amt;
         emit Transfer(usr, address(0), amt);
     }
 
