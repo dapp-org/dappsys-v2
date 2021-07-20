@@ -23,7 +23,7 @@ contract Token is Auth {
 
     // --- logs ---
 
-    event Approval(address indexed src, address indexed guy, uint amt);
+    event Approval(address indexed src, address indexed dst, uint amt);
     event Transfer(address indexed src, address indexed dst, uint amt);
 
     // --- init ---
