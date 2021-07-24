@@ -1,9 +1,10 @@
-name: "Build"
+name: Publish Documentation
 on:
-  pull_request:
   push:
+    branches:
+      - main
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -15,11 +16,14 @@ jobs:
         with:
           name: dapp
 
-      - name: run tests
-        run: nix-shell --pure --command "make test"
-
       - name: build documentation examples
         run: nix-shell --pure --command "make build-examples"
 
       - name: build docs
         run: nix-shell --pure --command "make doc-build"
+
+      - name: publish docs
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          branch: gh-pages
+          folder: doc/book
