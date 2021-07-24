@@ -8,8 +8,8 @@ pkgs.mkShell {
     dapp
     seth
     hevm
-    solc-static-versions.solc_0_8_4
+    mdbook
   ];
 
-  DAPP_SOLC="solc-0.8.4";
+  DAPP_SOLC="${pkgs.solc-static-versions.solc_0_8_4}/bin/solc-0.8.4";
 }

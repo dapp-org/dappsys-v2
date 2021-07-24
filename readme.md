@@ -17,5 +17,8 @@ A simplified and modernized dappsys contract library.
 
 ```
 nix-shell
-dapp build
+make build # build contracts
+make test  # test contracts
+make doc-build # build docs
+make doc-serve # serve docs and rebuild on changes
 ```
