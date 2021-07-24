@@ -19,21 +19,17 @@ contract Math {
     uint constant RAY = 10 ** 27;
     uint constant RAD = 10 ** 45;
 
-    //rounds to zero if x*y < WAD / 2
     function wmul(uint x, uint y) internal pure returns (uint z) {
-        z = ((x * y) + (WAD / 2)) / WAD;
+        z = (x * y) / WAD;
     }
-    //rounds to zero if x*y < WAD / 2
     function rmul(uint x, uint y) internal pure returns (uint z) {
-        z = ((x * y) + (RAY / 2)) / RAY;
+        z = (x * y) / RAY;
     }
-    //rounds to zero if x*y < WAD / 2
     function wdiv(uint x, uint y) internal pure returns (uint z) {
-        z = ((x * WAD) + (y / 2)) / y;
+        z = (x * WAD) / y;
     }
-    //rounds to zero if x*y < RAY / 2
     function rdiv(uint x, uint y) internal pure returns (uint z) {
-        z = ((x * RAY) + (y / 2)) / y;
+        z = (x * RAY) / y;
     }
 
     // This famous algorithm is called "exponentiation by squaring"
