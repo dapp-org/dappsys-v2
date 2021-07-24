@@ -1,4 +1,4 @@
 # Summary
 
-- [dappsys](./dappsys.md)
-- [auth](./auth.md)
+- [Dappsys](./dappsys.md)
+- [Auth](./auth.md)

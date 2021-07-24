@@ -3,4 +3,4 @@ authors = ["dapp.org"]
 language = "en"
 multilingual = false
 src = "src"
-title = "dappsys"
+title = "dappsys documentation"
