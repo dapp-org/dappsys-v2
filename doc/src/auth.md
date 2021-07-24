@@ -10,6 +10,9 @@ the caller is not a ward.
 
 The constructor of `Auth` takes an address that will be made the initial ward.
 
+- [source code](https://github.com/dapp-org/dappsys-v2/blob/main/src/auth.sol)
+- [tests](https://github.com/dapp-org/dappsys-v2/blob/main/src/test/auth.t.sol)
+
 ## Properties
 
 - authed methods can only be called by wards
