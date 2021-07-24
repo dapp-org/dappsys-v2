@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Auth - dappsys documentation</title>
+        <title>Math - dappsys documentation</title>
         
         
 
@@ -95,7 +95,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="dappsys.html"><strong aria-hidden="true">1.</strong> Dappsys</a></li><li class="chapter-item expanded "><a href="auth.html" class="active"><strong aria-hidden="true">2.</strong> Auth</a></li><li class="chapter-item expanded "><a href="math.html"><strong aria-hidden="true">3.</strong> Math</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="dappsys.html"><strong aria-hidden="true">1.</strong> Dappsys</a></li><li class="chapter-item expanded "><a href="auth.html"><strong aria-hidden="true">2.</strong> Auth</a></li><li class="chapter-item expanded "><a href="math.html" class="active"><strong aria-hidden="true">3.</strong> Math</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -163,96 +163,96 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="auth"><a class="header" href="#auth"><code>Auth</code></a></h1>
-<p><a href="https://github.com/dapp-org/dappsys-v2/blob/main/src/auth.sol"><code>source code</code></a> // <a href="https://github.com/dapp-org/dappsys-v2/blob/main/src/test/auth.t.sol"><code>tests</code></a></p>
-<p><code>Auth</code> implements a multi owner authorization pattern.</p>
-<p>An owner is known as a <code>ward</code> of the contract. Wards can make other users wards by calling
-<code>rely(address usr)</code>, or they can demote other wards by calling <code>deny(address usr)</code>.</p>
-<p>A contract that inherits from <code>Auth</code> will have the <code>auth</code> modifier available, which will revert if
-the caller is not a ward.</p>
-<p>The constructor of <code>Auth</code> takes an address that will be made the initial ward.</p>
-<h2 id="properties"><a class="header" href="#properties">Properties</a></h2>
+                        <h1 id="math"><a class="header" href="#math"><code>Math</code></a></h1>
+<p><a href="https://github.com/dapp-org/dappsys-v2/blob/main/src/math.sol"><code>source code</code></a> // <a href="https://github.com/dapp-org/dappsys-v2/blob/main/src/test/math.t.sol"><code>tests</code></a></p>
+<p><code>Math</code> implements a few common numeric helpers:</p>
 <ul>
-<li>authed methods can only be called by wards</li>
-<li>wards can only be added and removed by other wards</li>
-<li>all changes to ward status are logged</li>
+<li>fixed point division, multiplication and exponentiation</li>
+<li>a <a href="https://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Babylonian_method">babylonian</a> integer square root routine</li>
+<li>min and max methods for both <code>int</code> and <code>uint</code> types</li>
 </ul>
-<h2 id="reference"><a class="header" href="#reference">Reference</a></h2>
-<h3 id="data"><a class="header" href="#data">Data</a></h3>
+<h2 id="fixed-point-arithmetic"><a class="header" href="#fixed-point-arithmetic">Fixed Point Arithmetic</a></h2>
+<p>The fixed point multiplication and division routines are implemented for three different units:</p>
 <ul>
-<li><code>mapping (address =&gt; bool)</code>: wards status for every ethereum address</li>
+<li><code>wad</code>: fixed point decimal with 18 decimals (for basic quantities, e.g. balances)</li>
+<li><code>ray</code>: fixed point decimal with 27 decimals (for precise quantites, e.g. ratios)</li>
+<li><code>rad</code>: fixed point decimal with 45 decimals (result of integer multiplication with a <code>wad</code> and a <code>ray</code>)</li>
 </ul>
-<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
-<p><strong><code>rely(address usr)</code></strong>:</p>
+<p>Generally, <code>wad</code> should be used additively and <code>ray</code> should be used multiplicatively. It usually
+doesn't make sense to multiply a <code>wad</code> by a <code>wad</code> (or a <code>rad</code> by a <code>rad</code>).</p>
+<p>For convenience three useful constants are provided, each representing one in each of the above units:</p>
 <ul>
-<li>makes <code>usr</code> a ward</li>
-<li>logs a <code>Rely</code> event</li>
+<li><code>WAD</code>: <code>1 ** 18</code></li>
+<li><code>RAD</code>: <code>1 ** 27</code></li>
+<li><code>RAY</code>: <code>1 ** 45</code></li>
 </ul>
-<p><strong><code>deny(address usr)</code></strong>:</p>
+<h3 id="multiplication"><a class="header" href="#multiplication">Multiplication</a></h3>
+<p>Two multiplication operators are provided in <code>Math</code>:</p>
 <ul>
-<li>removes <code>usr</code> as a ward</li>
-<li>logs a <code>Deny</code> event</li>
+<li><code>wmul</code>: multiply a quantity by a <code>wad</code>. Precision is lost.</li>
+<li><code>rmul</code>: multiply a quantity by a <code>ray</code>. Precision is lost.</li>
 </ul>
-<h3 id="events"><a class="header" href="#events">Events</a></h3>
+<p>Both <code>wmul</code> and <code>rmul</code> will always round down.</p>
+<p>They can be used sensibly with the following combination of units:</p>
 <ul>
-<li><code>Rely(address usr)</code>: <code>usr</code> is now a ward</li>
-<li><code>Deny(address usr)</code>: <code>usr</code> is no longer a ward</li>
+<li><code>wmul(wad, wad) -&gt; wad</code></li>
+<li><code>wmul(ray, wad) -&gt; ray</code></li>
+<li><code>wmul(rad, wad) -&gt; rad</code></li>
+<li><code>rmul(wad, ray) -&gt; wad</code></li>
+<li><code>rmul(ray, ray) -&gt; ray</code></li>
+<li><code>rmul(rad, ray) -&gt; rad</code></li>
 </ul>
-<h2 id="example"><a class="header" href="#example">Example</a></h2>
-<pre><code class="language-solidity">// SPDX-License-Identifier: AGPL-3.0-only
-pragma solidity ^0.8.6;
-
-import {Auth} from &quot;dappsys-v2/auth.sol&quot;;
-
-contract Set is Auth {
-    uint public value;
-
-    // note that we must call the constructor of Auth to specify the initial ward
-    constructor(uint v) Auth(msg.sender) {
-        value = v;
-    }
-
-    function set(uint v) external auth {
-        value = v;
-    }
-}
-
-contract UseSet {
-    function go() external {
-        Set set = new Set(10);
-
-        // we are a ward here since we deployed the contract
-        require(set.wards(address(this)));
-
-        // since we are a ward we can call `set`
-        set.set(11);
-        require(set.value() == 11);
-
-        // make vitalik a ward
-        set.rely(0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B);
-        // revoke our authority
-        set.deny(address(this));
-
-        // this fails now since we are no longer a ward
-        set.set(12);
-    }
-}
-</code></pre>
+<h3 id="division"><a class="header" href="#division">Division</a></h3>
+<p>Two division operators are provided in <code>Math</code>:</p>
+<ul>
+<li><code>wdiv</code>: divide a quantity by a <code>wad</code>. Precision is lost.</li>
+<li><code>rdiv</code>: divide a quantity by a <code>ray</code>. Precision is lost.</li>
+</ul>
+<p>Both <code>wdiv</code> and <code>rdiv</code> will always round down.</p>
+<p>They can be used sensibly with the following combination of units:</p>
+<ul>
+<li><code>wdiv(wad, wad) -&gt; wad</code></li>
+<li><code>wdiv(ray, wad) -&gt; ray</code></li>
+<li><code>wdiv(rad, wad) -&gt; rad</code></li>
+<li><code>rdiv(wad, ray) -&gt; wad</code></li>
+<li><code>rdiv(ray, ray) -&gt; ray</code></li>
+<li><code>rdiv(rad, ray) -&gt; rad</code></li>
+</ul>
+<h3 id="exponentiation"><a class="header" href="#exponentiation">Exponentiation</a></h3>
+<p>The fixed point exponentiation routine (<code>rpow</code>) is implemented using <a href="https://en.wikipedia.org/wiki/Exponentiation_by_squaring">exponentiation by
+squaring</a>, giving a complexity of <code>O(log n)</code> (instead of <code>O(n)</code> for naive repeated multiplication).</p>
+<p><code>rpow</code> accepts three parameters:</p>
+<ul>
+<li><code>x</code>: the base</li>
+<li><code>n</code>: the exponent</li>
+<li><code>b</code>: the fixed point numeric base (e.g. 18 for a <code>wad</code>)</li>
+</ul>
+<p>calling <code>rpow(x, n, b)</code> will interpret <code>x</code> as a fixed point integer with <code>b</code> digits of precision,
+and raise it to the power of <code>n</code>.</p>
+<h2 id="square-root"><a class="header" href="#square-root">Square Root</a></h2>
+<p><code>sqrt</code> is an algorithm for approximating the square root of any given integer using the babylonian
+method. It can be shown that it terminates in <a href="https://dapp.org.uk/reports/uniswapv2.html#org1a9132f">at most 255 loop
+iterations</a>.</p>
+<p>Calling <code>sqrt(x)</code> will find the number <code>y</code> such that <code>y * y &lt;= x</code> and <code>(y + 1) * (y + 1) &gt; x</code></p>
+<h2 id="min--max-helpers"><a class="header" href="#min--max-helpers">Min / Max helpers</a></h2>
+<p>Four trvial <code>min</code> / <code>max</code> helpers are provided:</p>
+<ul>
+<li><code>min(uint x, uint y)</code>: finds the minimum of two uints</li>
+<li><code>max(uint x, uint y)</code>: finds the maximum of two uints</li>
+<li><code>imin(int x, int y)</code>:  finds the minimum of two ints</li>
+<li><code>imax(int x, int y)</code>:  finds the maximum of two ints</li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="dappsys.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="auth.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
-                        
-                            <a rel="next" href="math.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
                         
 
                         <div style="clear: both"></div>
@@ -262,15 +262,11 @@ contract UseSet {
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a rel="prev" href="dappsys.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="auth.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
-                
-                    <a rel="next" href="math.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
                 
             </nav>
 
