@@ -4,7 +4,7 @@ A simplified and modernized dappsys contract library.
 
 **WARNING**: This is still very much a work in progress. Do not use these contracts in production!
 
-Documentation is live at [`dapp.org/dappsys-v2`](https://www.dapp.org/dappsys-v2).
+Documentation is live at [`dapp.org/dappsys-v2`](https://dapp.org.uk/dappsys-v2).
 
 ## Development
 
