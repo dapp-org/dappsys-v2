@@ -18,6 +18,9 @@ import {ERC20} from "./erc20.sol";
     See https://github.com/d-xo/weird-erc20 for a non exhaustive list of weird tokens.
 */
 contract Move {
+    function move(address token, address dst, uint amt) public {
+        move(token, msg.sender, dst, amt);
+    }
     function move(address token, address src, address dst, uint amt) public {
         uint preBal = ERC20(token).balanceOf(dst);
 
