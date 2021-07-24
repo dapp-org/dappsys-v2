@@ -56,6 +56,13 @@ contract TestToken is DSTest {
         }
     }
 
+    function proveFailTransferIsufficientBalance(address dst, uint mintAmt, uint sendAmt) public {
+        require(mintAmt < sendAmt);
+
+        token.mint(address(this), mintAmt);
+        token.transfer(dst, sendAmt);
+    }
+
     function proveTransferFrom(address src, address dst, uint approval, uint amt) public {
         if (amt > approval) return; // src must approve this for more than amt
 
