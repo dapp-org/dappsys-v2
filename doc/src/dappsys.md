@@ -22,7 +22,7 @@ Wherever possible security properties have been verified formally.
 ### Mixins
 
 - [`auth.sol`](./auth.md): multi-owner auth
-- `math.sol`: fixed point numeric routines
+- [`math.sol`](./math.md): fixed point numeric routines
 - `move.sol`: erc20 `transferFrom` wrapper
 
 ### Standalone Contracts

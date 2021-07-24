@@ -1,5 +1,7 @@
 # `Auth`
 
+[`source code`](https://github.com/dapp-org/dappsys-v2/blob/main/src/auth.sol) // [`tests`](https://github.com/dapp-org/dappsys-v2/blob/main/src/test/auth.t.sol)
+
 `Auth` implements a multi owner authorization pattern.
 
 An owner is known as a `ward` of the contract. Wards can make other users wards by calling
@@ -9,9 +11,6 @@ A contract that inherits from `Auth` will have the `auth` modifier available, wh
 the caller is not a ward.
 
 The constructor of `Auth` takes an address that will be made the initial ward.
-
-- [source code](https://github.com/dapp-org/dappsys-v2/blob/main/src/auth.sol)
-- [tests](https://github.com/dapp-org/dappsys-v2/blob/main/src/test/auth.t.sol)
 
 ## Properties
 
