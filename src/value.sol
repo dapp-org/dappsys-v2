@@ -16,10 +16,7 @@ contract Value is Auth {
 
     // --- init ---
 
-    constructor() {
-        wards[msg.sender] = true;
-        emit Rely(msg.sender);
-    }
+    constructor() Auth(msg.sender) {}
 
     // --- value ---
 

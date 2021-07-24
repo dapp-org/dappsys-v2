@@ -15,10 +15,10 @@ contract Proxy is Auth {
 
     // --- init ---
 
-    constructor(address usr, address builder_) {
+    constructor(address usr, address builder_)
+        Auth(usr)
+    {
         builder = Builder(builder_);
-        wards[usr] = true;
-        emit Rely(usr);
     }
 
     // --- exec ---

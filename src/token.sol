@@ -29,11 +29,11 @@ contract Token is Auth {
 
     // --- init ---
 
-    constructor(string memory _name, string memory _symbol) {
+    constructor(string memory _name, string memory _symbol)
+        Auth(msg.sender)
+    {
         name = _name;
         symbol = _symbol;
-        wards[msg.sender] = true;
-        emit Rely(msg.sender);
     }
 
     // --- admin ---

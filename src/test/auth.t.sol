@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
+// SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.4;
 
 import {DSTest} from "ds-test/test.sol";
@@ -6,19 +6,21 @@ import {Auth} from "../auth.sol";
 import {Hevm} from "./hevm.sol";
 
 contract TestAuth is DSTest {
-    Auth auth = new Auth();
     Hevm hevm = Hevm(HEVM_ADDRESS);
 
-    // --- tests ---
+    function proveConstructorWard(address usr) public {
+        Auth auth = new Auth(usr);
+        assertTrue(auth.wards(usr));
+    }
 
     function proveFailRelyNonWard(address usr) public {
-        if (auth.wards(address(this))) return;
+        Auth auth = new Auth(address(0));
         auth.rely(usr);
     }
 
     function proveRely(address usr) public {
         if (usr == address(this)) return;
-        makeWard(address(this));
+        Auth auth = new Auth(address(this));
 
         assertTrue(!auth.wards(usr));
         auth.rely(usr);
@@ -26,27 +28,17 @@ contract TestAuth is DSTest {
     }
 
     function proveFailDenyNonWard(address usr) public {
-        if (auth.wards(address(this))) return;
+        Auth auth = new Auth(address(0));
         auth.deny(usr);
     }
 
     function proveDeny(address usr) public {
         if (usr == address(this)) return;
-        makeWard(address(this));
-        makeWard(usr);
+        Auth auth = new Auth(address(this));
+        auth.rely(usr);
 
         assertTrue(auth.wards(usr));
         auth.deny(usr);
         assertTrue(!auth.wards(usr));
-    }
-
-    // --- utils ---
-
-    function makeWard(address usr) internal {
-        hevm.store(
-            address(auth),
-            keccak256(abi.encode(usr, uint256(0))),
-            bytes32(uint(1))
-        );
     }
 }

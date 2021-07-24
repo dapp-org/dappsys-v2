@@ -19,11 +19,11 @@ contract Delay is Auth {
 
     // --- init ---
 
-    constructor(uint delay_) {
+    constructor(uint delay_)
+        Auth(msg.sender)
+    {
         delay = delay_;
-        wards[msg.sender] = true;
         emit File(delay_);
-        emit Rely(msg.sender);
     }
 
     // --- admin ---

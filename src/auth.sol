@@ -7,6 +7,11 @@ contract Auth {
     event Rely(address usr);
     event Deny(address usr);
 
+    constructor(address usr) {
+        wards[usr] = true;
+        emit Rely(usr);
+    }
+
     modifier auth {
         require(wards[msg.sender], "auth/unauthorized");
         _;
