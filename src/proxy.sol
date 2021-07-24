@@ -50,6 +50,8 @@ contract Proxy is Auth {
         emit Execute(usr, data);
     }
 
+    // --- util ---
+
     function create2Address(bytes memory code) internal view returns (address) {
         return address(uint160(uint(keccak256(abi.encodePacked(
             bytes1(0xff),
