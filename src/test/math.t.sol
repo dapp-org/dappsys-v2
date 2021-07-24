@@ -6,7 +6,9 @@ import {DSTest} from "ds-test/test.sol";
 
 contract TestMath is Math, DSTest {
 
-    function proveMin(uint x, uint y) public {
+    // TODO: make these min / max tests symbolic once
+    // https://github.com/dapphub/dapptools/issues/705 is fixed
+    function testMin(uint x, uint y) public {
         if (x <= y) {
             assertEq(min(x, y), x);
         } else {
@@ -14,7 +16,7 @@ contract TestMath is Math, DSTest {
         }
     }
 
-    function proveMax(uint x, uint y) public {
+    function testMax(uint x, uint y) public {
         if (x >= y) {
             assertEq(max(x, y), x);
         } else {
@@ -22,7 +24,7 @@ contract TestMath is Math, DSTest {
         }
     }
 
-    function proveIMin(int x, int y) public {
+    function testIMin(int x, int y) public {
         if (x <= y) {
             assertEq(imin(x, y), x);
         } else {
@@ -30,7 +32,7 @@ contract TestMath is Math, DSTest {
         }
     }
 
-    function proveIMax(int x, int y) public {
+    function testIMax(int x, int y) public {
         if (x >= y) {
             assertEq(imax(x, y), x);
         } else {
@@ -50,6 +52,7 @@ contract TestMath is Math, DSTest {
 
     /*
        tests rpow for a base of 1
+       TODO: investigate counterexample: testRpow(42,198)
     */
     function testRpow(uint8 _x, uint8 _n) public {
         // avoid overflow
