@@ -1,5 +1,7 @@
 # Dappsys
 
+**WARNING**: This is still very much a work in progress. Do not use these contracts in production!
+
 Dappsys is a set of minimal utility contracts targeting solidity versions above 0.8.
 
 The contracts are written in a style that attempts wherever possible to avoid the following:
