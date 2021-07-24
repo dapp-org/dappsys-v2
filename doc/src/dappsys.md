@@ -1,21 +1,33 @@
-# Dappsys
+Dappsys is a set of minimal utility contracts targeting solidity versions above 0.8.
 
-Dappsys is a set of minimal utility contracts targeting solidity versions above 0.8. The following
-contracts are included:
+The contracts are written in a style that attempts wherever possible to avoid the following:
 
-## Mixins
+- dependencies
+- inheritance
+- external calls
+- branching
+- looping
+- dynamic types
 
-- `auth.sol`: multi-owner auth
+Alignment and aesthetics are considered to be beneficial to auditability and so are prioritised.
+
+Wherever possible security properties have been verified using formal methodolgies.
+
+## Contracts
+
+### Mixins
+
+- [`auth.sol`](./auth.md): multi-owner auth
 - `math.sol`: fixed point numeric routines
 - `move.sol`: erc20 `transferFrom` wrapper
 
-## Standalone Contracts
+### Standalone Contracts
 
 - `token.sol`: an erc20 token with authed mint / burn and `permit`
 - `proxy.sol`: execute atomic transaction sequences from a persistent identity
 - `delay.sol`: a governance timelock delay
 - `value.sol`: an on chain beacon for off chain oracles
 
-## Interface Definitions
+### Interface Definitions
 
 - `erc20.sol`
