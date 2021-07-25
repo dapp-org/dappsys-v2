@@ -32,7 +32,7 @@ contract Guarded {
 
     modifier guarded() {
         bytes4 selector = bytes4(msg.data[:4]);
-        require(guard.acl(msg.sender, address(this), selector), "unauthorized");
+        require(guard.acl(msg.sender, address(this), selector), "guard/unauthorized");
         _;
     }
 }
