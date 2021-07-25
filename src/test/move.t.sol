@@ -7,7 +7,7 @@ import {ReturnsFalseToken} from "weird-erc20/ReturnsFalse.sol";
 import {MissingReturnsToken} from "weird-erc20/MissingReturns.sol";
 
 import {Hevm} from "./hevm.sol";
-import {Move} from "../auth.sol";
+import {Move} from "../move.sol";
 
 contract TestMove is DSTest, Move {
     ReturnsFalseToken returnsFalse = new ReturnsFalseToken(type(uint).max);
