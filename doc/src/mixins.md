@@ -9,3 +9,4 @@ These contracts can be inherited from to provide common functionality:
 - [`auth.sol`](./auth.md): multi owner auth
 - [`math.sol`](./math.md): common numeric routines
 - [`move.sol`](./move.md): erc20 transferFrom wrapper
+- [`lock.sol`](./lock.md): reentrancy mutex

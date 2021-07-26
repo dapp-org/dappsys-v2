@@ -6,3 +6,4 @@
   - [Auth](./auth.md)
   - [Math](./math.md)
   - [Move](./move.md)
+  - [Lock](./lock.md)

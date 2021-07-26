@@ -4,7 +4,7 @@
 
 Dappsys is a set of minimal utility contracts targeting solidity versions above 0.8.
 
-The contracts are written in a style that attempts wherever possible to avoid the following:
+The contracts are written in a style that attempts wherever practical to avoid the following:
 
 - dependencies
 - inheritance
