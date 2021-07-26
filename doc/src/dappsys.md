@@ -24,6 +24,7 @@ Wherever possible security properties have been verified formally.
 - [`auth.sol`](./auth.md): multi-owner auth
 - [`math.sol`](./math.md): fixed point numeric routines
 - [`move.sol`](./move.md): erc20 `transferFrom` wrapper
+- [`lock.sol`](./lock.md): reentrancy mutex
 
 ### Standalone Contracts
 
