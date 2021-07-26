@@ -5,6 +5,7 @@ import {DSTest} from "ds-test/test.sol";
 import {ERC20} from "weird-erc20/ERC20.sol";
 import {ReturnsFalseToken} from "weird-erc20/ReturnsFalse.sol";
 import {MissingReturnToken} from "weird-erc20/MissingReturns.sol";
+import {TransferFromSelfToken} from "weird-erc20/TransferFromSelf.sol";
 
 import {Hevm} from "./hevm.sol";
 import {Move} from "../move.sol";
@@ -12,6 +13,7 @@ import {Move} from "../move.sol";
 contract TestMove is DSTest, Move {
     ReturnsFalseToken returnsFalse = new ReturnsFalseToken(type(uint).max);
     MissingReturnToken missingReturn = new MissingReturnToken(type(uint).max);
+    TransferFromSelfToken transferFromSelf = new TransferFromSelfToken(type(uint).max);
     ERC20 erc20 = new ERC20(type(uint).max);
     Hevm hevm = Hevm(HEVM_ADDRESS);
 
@@ -21,6 +23,14 @@ contract TestMove is DSTest, Move {
     }
     function proveWithMissingReturn(address src, address dst, uint amt) public {
         verifyMove(address(missingReturn), src, dst, amt);
+    }
+
+    // success with OZ style transferFrom self semantics
+    function proveWithTransferFromSelf(address dst, uint amt) public {
+        verifyMove(address(transferFromSelf), dst, amt);
+    }
+    function proveWithTransferFromSelf(address src, address dst, uint amt) public {
+        verifyMove(address(transferFromSelf), src, dst, amt);
     }
 
     // success with standard erc20
