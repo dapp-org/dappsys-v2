@@ -97,7 +97,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="dappsys.html">Dappsys</a></li><li class="chapter-item expanded "><a href="mixins.html"><strong aria-hidden="true">1.</strong> Mixins</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="auth.html"><strong aria-hidden="true">1.1.</strong> Auth</a></li><li class="chapter-item expanded "><a href="math.html"><strong aria-hidden="true">1.2.</strong> Math</a></li><li class="chapter-item expanded "><a href="move.html"><strong aria-hidden="true">1.3.</strong> Move</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="dappsys.html">Dappsys</a></li><li class="chapter-item expanded "><a href="mixins.html"><strong aria-hidden="true">1.</strong> Mixins</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="auth.html"><strong aria-hidden="true">1.1.</strong> Auth</a></li><li class="chapter-item expanded "><a href="math.html"><strong aria-hidden="true">1.2.</strong> Math</a></li><li class="chapter-item expanded "><a href="move.html"><strong aria-hidden="true">1.3.</strong> Move</a></li><li class="chapter-item expanded "><a href="lock.html"><strong aria-hidden="true">1.4.</strong> Lock</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -168,7 +168,7 @@
                         <h1 id="dappsys"><a class="header" href="#dappsys">Dappsys</a></h1>
 <p><strong>WARNING</strong>: This is still very much a work in progress. Do not use these contracts in production!</p>
 <p>Dappsys is a set of minimal utility contracts targeting solidity versions above 0.8.</p>
-<p>The contracts are written in a style that attempts wherever possible to avoid the following:</p>
+<p>The contracts are written in a style that attempts wherever practical to avoid the following:</p>
 <ul>
 <li>dependencies</li>
 <li>inheritance</li>
@@ -207,6 +207,7 @@ across many files.</p>
 <li><a href="./auth.html"><code>auth.sol</code></a>: multi owner auth</li>
 <li><a href="./math.html"><code>math.sol</code></a>: common numeric routines</li>
 <li><a href="./move.html"><code>move.sol</code></a>: erc20 transferFrom wrapper</li>
+<li><a href="./lock.html"><code>lock.sol</code></a>: reentrancy mutex</li>
 </ul>
 <h1 id="auth"><a class="header" href="#auth"><code>Auth</code></a></h1>
 <p><a href="https://github.com/dapp-org/dappsys-v2/blob/main/src/auth.sol"><code>source code</code></a> // <a href="https://github.com/dapp-org/dappsys-v2/blob/main/src/test/auth.t.sol"><code>tests</code></a></p>
@@ -388,6 +389,58 @@ will be interacting with.</p>
 <li>Reverts if the call to <code>transferFrom</code> reverts</li>
 <li>Reverts if <code>token</code> returns a boolean <code>false</code>.</li>
 </ul>
+<h1 id="lock"><a class="header" href="#lock">Lock</a></h1>
+<p><a href="https://github.com/dapp-org/dappsys-v2/blob/main/src/lock.sol"><code>source code</code></a> // <a href="https://github.com/dapp-org/dappsys-v2/blob/main/src/test/lock.t.sol"><code>tests</code></a></p>
+<p><code>Lock</code> provides a reentrancy mutex. Contracts that inherit from <code>Lock</code> will have the <code>lock</code> modifier
+available, any subcall resulting from a call to a locked method will revert if it attempts to call
+any other locked method on the same contract.</p>
+<p>Note that reentrant calls to methods that are not protected by the lock modifier will still succeed.</p>
+<h2 id="interface-1"><a class="header" href="#interface-1">Interface</a></h2>
+<h4 id="data-1"><a class="header" href="#data-1">Data</a></h4>
+<ul>
+<li><code>bool unlocked</code>: lock status</li>
+</ul>
+<h4 id="modifiers"><a class="header" href="#modifiers">Modifiers</a></h4>
+<p><strong><code>lock()</code></strong>:</p>
+<p>reverts if <code>unlocked</code> is true, and sets it to <code>false</code> for the duration of the call to the wrapped method.</p>
+<h2 id="example-1"><a class="header" href="#example-1">Example</a></h2>
+<pre><code class="language-solidity">// SPDX-License-Identifier: AGPL-3.0-only
+pragma solidity ^0.8.6;
+
+import {Lock} from &quot;dappsys-v2/lock.sol&quot;;
+
+contract Locked is Lock {
+    uint public value = 0;
+
+    function badSet(uint v) external lock {
+        doSet(v);
+    }
+
+    function doBadSet(uint v) internal lock {
+        value = v;
+    }
+
+    function goodSet(uint v) external lock {
+        doGoodSet(v);
+    }
+
+    function doGoodSet(uint v) internal {
+        value = v;
+    }
+}
+
+contract Test {
+    function go() external {
+        Locked locked = new Locked();
+
+        // this call will work since `doGoodSet` is not protected by the lock
+        locked.goodSet(10);
+
+        // this will always revert since `unlocked` is `false` during the inner call to `doBadSet`
+        locked.badSet(10);
+    }
+}
+</code></pre>
 
                     </main>
 
