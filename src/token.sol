@@ -94,7 +94,7 @@ contract Token is Auth {
     }
 
     function DOMAIN_SEPARATOR() public view returns (bytes32) {
-        bytes32 domainTypehash = keccak256("EIP712Domain(string name,uint256 chainId,address verifyingContract)");
-        return keccak256(abi.encode(domainTypehash, keccak256(bytes(name)), block.chainid, address(this)));
+        bytes32 domainTypehash = keccak256('EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)');
+        return keccak256(abi.encode(domainTypehash, keccak256(bytes(name)), keccak256(bytes('1')), block.chainid, address(this)));
     }
 }
