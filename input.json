@@ -90,9 +90,7 @@
   "settings": {
     "remappings": [
       "ds-test/=lib/ds-test/src/",
-      "ds-test=lib/ds-test/src/index.sol",
-      "weird-erc20/=lib/weird-erc20/src/",
-      "weird-erc20=lib/weird-erc20/src/index.sol"
+      "weird-erc20/=lib/weird-erc20/src/"
     ],
     "modelChecker": {
       "contracts": {

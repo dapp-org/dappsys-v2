@@ -77,24 +77,24 @@ contract Token is Auth {
     // --- permit ---
 
     function permit(address owner, address spender, uint value, uint deadline, uint8 v, bytes32 r, bytes32 s) external {
-        require(deadline >= block.timestamp, 'token/expired-permit');
+        require(deadline >= block.timestamp, "token/expired-permit");
         bytes32 digest = keccak256(
             abi.encodePacked(
-                '\x19\x01',
+                "\x19\x01",
                 DOMAIN_SEPARATOR(),
                 keccak256(abi.encode(PERMIT_TYPEHASH, owner, spender, value, nonces[owner]++, deadline))
             )
         );
 
         address recoveredAddress = ecrecover(digest, v, r, s);
-        require(recoveredAddress != address(0) && recoveredAddress == owner, 'token/invalid-signature');
+        require(recoveredAddress != address(0) && recoveredAddress == owner, "token/invalid-signature");
 
         allowance[owner][spender] = value;
         emit Approval(owner, spender, value);
     }
 
     function DOMAIN_SEPARATOR() public view returns (bytes32) {
-        bytes32 domainTypehash = keccak256('EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)');
-        return keccak256(abi.encode(domainTypehash, keccak256(bytes(name)), keccak256(bytes('1')), block.chainid, address(this)));
+        bytes32 domainTypehash = keccak256("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)");
+        return keccak256(abi.encode(domainTypehash, keccak256(bytes(name)), keccak256(bytes("1")), block.chainid, address(this)));
     }
 }
