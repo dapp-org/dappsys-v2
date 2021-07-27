@@ -3,15 +3,14 @@ pragma solidity ^0.8.6;
 
 import {Lock} from "../lock.sol";
 
-/*
-    This contract uses the solc SMTChecker to verify that there does not exist
-    a reentrant call from `enter` that could set `broken` to true
-*/
-
 interface External {
   function ext(bytes calldata data) external;
 }
 
+/*
+    This contract uses the solc SMTChecker to verify that there does not exist
+    a reentrant call from `enter` that could set `broken` to true
+*/
 contract TestLock is Lock {
     bool broken = false;
     bool entered = false;

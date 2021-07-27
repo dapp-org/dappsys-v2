@@ -52,12 +52,13 @@ contract TestMath is Math, DSTest {
 
     /*
        tests rpow for a base of 1
-       TODO: investigate counterexample: testRpow(42,198)
     */
     function testRpow(uint8 _x, uint8 _n) public {
         // avoid overflow
-        uint x = _x % 50;
-        uint n = _n % 50;
+        uint x = _x % 45;
+        uint n = _n % 45;
+        emit log_named_uint("x:", x);
+        emit log_named_uint("n:", n);
 
         assertEq(rpow(x, n, 1), x ** n);
     }
