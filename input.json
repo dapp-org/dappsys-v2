@@ -1,0 +1,125 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "src/guard.sol": {
+      "urls": [
+        "src/guard.sol"
+      ]
+    },
+    "src/auth.sol": {
+      "urls": [
+        "src/auth.sol"
+      ]
+    },
+    "src/proxy.sol": {
+      "urls": [
+        "src/proxy.sol"
+      ]
+    },
+    "src/delay.sol": {
+      "urls": [
+        "src/delay.sol"
+      ]
+    },
+    "src/erc20.sol": {
+      "urls": [
+        "src/erc20.sol"
+      ]
+    },
+    "src/move.sol": {
+      "urls": [
+        "src/move.sol"
+      ]
+    },
+    "src/value.sol": {
+      "urls": [
+        "src/value.sol"
+      ]
+    },
+    "src/lock.sol": {
+      "urls": [
+        "src/lock.sol"
+      ]
+    },
+    "src/math.sol": {
+      "urls": [
+        "src/math.sol"
+      ]
+    },
+    "src/token.sol": {
+      "urls": [
+        "src/token.sol"
+      ]
+    },
+    "src/test/math.t.sol": {
+      "urls": [
+        "src/test/math.t.sol"
+      ]
+    },
+    "src/test/lock.t.sol": {
+      "urls": [
+        "src/test/lock.t.sol"
+      ]
+    },
+    "src/test/token.t.sol": {
+      "urls": [
+        "src/test/token.t.sol"
+      ]
+    },
+    "src/test/move.t.sol": {
+      "urls": [
+        "src/test/move.t.sol"
+      ]
+    },
+    "src/test/auth.t.sol": {
+      "urls": [
+        "src/test/auth.t.sol"
+      ]
+    },
+    "src/test/hevm.sol": {
+      "urls": [
+        "src/test/hevm.sol"
+      ]
+    },
+    "src/test/value.t.sol": {
+      "urls": [
+        "src/test/value.t.sol"
+      ]
+    }
+  },
+  "settings": {
+    "remappings": [
+      "ds-test/=lib/ds-test/src/",
+      "ds-test=lib/ds-test/src/index.sol",
+      "weird-erc20/=lib/weird-erc20/src/",
+      "weird-erc20=lib/weird-erc20/src/index.sol"
+    ],
+    "modelChecker": {
+      "contracts": {
+        "src/test/lock.t.sol": ["TestLock"]
+      },
+      "engine": "chc"
+    },
+    "outputSelection": {
+      "*": {
+        "*": [
+          "metadata",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "abi",
+          "storageLayout",
+          "evm.bytecode.sourceMap",
+          "evm.bytecode.linkReferences",
+          "evm.bytecode.generatedSources",
+          "evm.deployedBytecode.sourceMap",
+          "evm.deployedBytecode.linkReferences",
+          "evm.deployedBytecode.generatedSources",
+          "evm.deployedBytecode.immutableReferences"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    }
+  }
+}
