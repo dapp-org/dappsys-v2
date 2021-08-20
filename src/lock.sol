@@ -2,13 +2,12 @@
 pragma solidity ^0.8.6;
 
 contract Lock {
-    bool unlocked = true;
+    uint unlocked = 1;
 
     modifier lock() {
         require(unlocked, "lock/locked");
-        unlocked = false;
+        unlocked = 0;
         _;
-        unlocked = true;
+        unlocked = 1;
     }
 }
-
