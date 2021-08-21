@@ -11,12 +11,12 @@ contract Token is Auth {
     string  public symbol;
     uint8   public constant decimals = 18;
 
-    uint256 public totalSupply;
+    uint public totalSupply;
 
     mapping (address => uint)                      public balanceOf;
     mapping (address => mapping (address => uint)) public allowance;
 
-    mapping(address => uint256) public nonces;
+    mapping(address => uint) public nonces;
     bytes32 public constant PERMIT_TYPEHASH =
         keccak256(
             "Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)"
