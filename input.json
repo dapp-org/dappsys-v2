@@ -92,12 +92,6 @@
       "ds-test/=lib/ds-test/src/",
       "weird-erc20/=lib/weird-erc20/src/"
     ],
-    "modelChecker": {
-      "contracts": {
-        "src/test/lock.t.sol": ["TestLock"]
-      },
-      "engine": "chc"
-    },
     "outputSelection": {
       "*": {
         "*": [
