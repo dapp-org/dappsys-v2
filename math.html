@@ -231,7 +231,9 @@ squaring</a>, giving a complexity of <code>O(log n)</code> (instead of <code>O(n
 and raise it to the power of <code>n</code>.</p>
 <h2 id="square-root"><a class="header" href="#square-root">Square Root</a></h2>
 <p><code>sqrt</code> is an algorithm for approximating the square root of any given integer using the babylonian
-method. It can be shown that it terminates in <a href="https://dapp.org.uk/reports/uniswapv2.html#org1a9132f">at most 255 loop
+method. The implementation is taken from
+<a href="https://github.com/Uniswap/uniswap-v2-core/blob/4dd59067c76dea4a0e8e4bfdda41877a6b16dedc/contracts/libraries/Math.sol#L11">uniswap-v2-core</a>.
+It can be shown that it terminates in <a href="https://dapp.org.uk/reports/uniswapv2.html#org1a9132f">at most 255 loop
 iterations</a>.</p>
 <p>Calling <code>sqrt(x)</code> will find the number <code>y</code> such that <code>y * y &lt;= x</code> and <code>(y + 1) * (y + 1) &gt; x</code></p>
 <h2 id="min--max-helpers"><a class="header" href="#min--max-helpers">Min / Max helpers</a></h2>
