@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.6;
 
-import {Math} from "../math.sol";
+import "../math.sol";
 import {DSTest} from "ds-test/test.sol";
 
-contract TestMath is Math, DSTest {
+contract TestMath is DSTest {
 
     // TODO: make these min / max tests symbolic once
     // https://github.com/dapphub/dapptools/issues/705 is fixed

@@ -8,9 +8,9 @@ import {MissingReturnToken} from "weird-erc20/MissingReturns.sol";
 import {TransferFromSelfToken} from "weird-erc20/TransferFromSelf.sol";
 
 import {Hevm} from "./hevm.sol";
-import {Move} from "../move.sol";
+import {move} from "../move.sol";
 
-contract TestMove is DSTest, Move {
+contract TestMove is DSTest {
     ReturnsFalseToken returnsFalse = new ReturnsFalseToken(type(uint).max);
     MissingReturnToken missingReturn = new MissingReturnToken(type(uint).max);
     TransferFromSelfToken transferFromSelf = new TransferFromSelfToken(type(uint).max);
