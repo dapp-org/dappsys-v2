@@ -73,16 +73,39 @@ contract Math {
 
     // babylonian method (https://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Babylonian_method)
     // proof of correctness: https://dapp.org.uk/reports/uniswapv2.html#org1a9132f
+    // proofs of safety in smt for unchecked for both cases of addition:
+    /*
+        ;; y / 2 + 1;
+        (declare-const y (_ BitVec 256))
+        (define-const two (_ BitVec 256) (_ bv2 256))
+        (define-const one (_ BitVec 256) (_ bv1 256))
+        (assert (bvult (bvadd (bvudiv y two) one) (bvudiv y two)))
+        (check-sat)
+        ;; unsat
+    */
+    /*
+        ;; y / x + x
+        (declare-const x (_ BitVec 256))
+        (declare-const y (_ BitVec 256))
+        (define-const two (_ BitVec 256) (_ bv2 256))
+        (define-const one (_ BitVec 256) (_ bv1 256))
+        (assert (= x (bvadd (bvudiv y two) one)))
+        (assert (bvult (bvadd (bvudiv y x) x) (bvudiv y x)))
+        (check-sat)
+        ;; unsat
+    */
     function sqrt(uint y) internal pure returns (uint z) {
-        if (y > 3) {
-            z = y;
-            uint x = y / 2 + 1;
-            while (x < z) {
-                z = x;
-                x = (y / x + x) / 2;
+        unchecked {
+            if (y > 3) {
+                z = y;
+                uint x = y / 2 + 1;
+                while (x < z) {
+                    z = x;
+                    x = (y / x + x) / 2;
+                }
+            } else if (y != 0) {
+                z = 1;
             }
-        } else if (y != 0) {
-            z = 1;
         }
     }
 }
