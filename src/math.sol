@@ -72,7 +72,9 @@ contract Math {
     }
 
     // babylonian method (https://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Babylonian_method)
-    // proof of correctness: https://dapp.org.uk/reports/uniswapv2.html#org1a9132f
+    // implementation taken from uniswap-v2-core:
+    //   https://github.com/Uniswap/uniswap-v2-core/blob/4dd59067c76dea4a0e8e4bfdda41877a6b16dedc/contracts/libraries/Math.sol#L11
+    // proof of correctness & termination: https://dapp.org.uk/reports/uniswapv2.html#org1a9132f
     // proofs of safety in smt for unchecked for both cases of addition:
     /*
         ;; y / 2 + 1;

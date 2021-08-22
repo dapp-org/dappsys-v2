@@ -79,7 +79,9 @@ and raise it to the power of `n`.
 ## Square Root
 
 `sqrt` is an algorithm for approximating the square root of any given integer using the babylonian
-method. It can be shown that it terminates in [at most 255 loop
+method. The implementation is taken from
+[uniswap-v2-core](https://github.com/Uniswap/uniswap-v2-core/blob/4dd59067c76dea4a0e8e4bfdda41877a6b16dedc/contracts/libraries/Math.sol#L11).
+It can be shown that it terminates in [at most 255 loop
 iterations](https://dapp.org.uk/reports/uniswapv2.html#org1a9132f).
 
 Calling `sqrt(x)` will find the number `y` such that `y * y <= x` and `(y + 1) * (y + 1) > x`
