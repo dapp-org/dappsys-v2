@@ -10,22 +10,10 @@ The token is fully compliant with the [ERC20 interface specification](https://ei
 
 ## Semantics
 
-In terms of semantics the token is designed to be minimally surprising and as such does not implement any of the following:
-
-- blocklists
-- admin controlled pause
-- transfer fees
-- reverts on transfers to or from the zero address
-- reverts on approval to or from the zero address
-- reverts on approvals when an non-zero approval is already in place
-- reverts on zero value transfers
-- reverts on large transfers / approvals
-
-The token `decimals` is hardcoded to `18`.
-
-The token is immutable and cannot be upgraded once deployed.
-
-A call to `transferFrom(address(this), usr, amt)` is semantically exactly the same as a call to `transfer(usr, amt)`.
+- The token is designed to be minimally surprising and avoids any additional checks or reverts that
+    are not strictly essential for implementing the core transfer semantics.
+- The token `decimals` is hardcoded to `18`.
+- The token is immutable and cannot be upgraded once deployed.
 
 ### `mint(address usr, uint amt) auth`
 
@@ -83,3 +71,12 @@ delegation of control over token balances via a signed message. This has two mai
 - It allows users to both approve a contract on their tokens and then have the contract pull those
     tokens in a single transaction.
 
+`EIP-2612` adds 3 methods to the standard `ERC20` ABI:
+
+```
+function permit(address owner, address spender, uint value, uint deadline, uint8 v, bytes32 r, bytes32 s) external
+function nonces(address owner) external view returns (uint)
+function DOMAIN_SEPARATOR() external view returns (bytes32)
+```
+
+For a full description of the semantics, refer to the [EIP](https://eips.ethereum.org/EIPS/eip-2612#specification).

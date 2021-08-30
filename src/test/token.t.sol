@@ -122,14 +122,7 @@ contract TestToken is DSTest {
         hevm.warp(time);
 
         address owner = hevm.addr(sk);
-        bytes32 digest = keccak256(
-            abi.encodePacked(
-                "\x19\x01",
-                token.DOMAIN_SEPARATOR(),
-                keccak256(abi.encode(token.PERMIT_TYPEHASH(), owner, spender, val, token.nonces(owner), deadline))
-            )
-        );
-        (uint8 v, bytes32 r, bytes32 s) = hevm.sign(sk, digest);
+        (uint8 v, bytes32 r, bytes32 s) = signPermit(sk, owner, spender, val, token.nonces(owner), deadline);
 
         token.permit(owner, spender, val, deadline, v, r, s);
         assertEq(token.allowance(owner, spender), val);
@@ -140,15 +133,7 @@ contract TestToken is DSTest {
         hevm.warp(time);
 
         address owner = hevm.addr(sk);
-        bytes32 digest = keccak256(
-            abi.encodePacked(
-                "\x19\x01",
-                token.DOMAIN_SEPARATOR(),
-                keccak256(abi.encode(token.PERMIT_TYPEHASH(), owner, spender, val, token.nonces(owner), deadline))
-            )
-        );
-        (uint8 v, bytes32 r, bytes32 s) = hevm.sign(sk, digest);
-
+        (uint8 v, bytes32 r, bytes32 s) = signPermit(sk, owner, spender, val, token.nonces(owner), deadline);
         token.permit(owner, spender, val, deadline, v, r, s);
     }
 
@@ -158,53 +143,26 @@ contract TestToken is DSTest {
         hevm.warp(time);
 
         address owner = hevm.addr(sk);
-        bytes32 digest = keccak256(
-            abi.encodePacked(
-                "\x19\x01",
-                token.DOMAIN_SEPARATOR(),
-                keccak256(abi.encode(token.PERMIT_TYPEHASH(), owner, spender, signVal, token.nonces(owner), deadline))
-            )
-        );
-        (uint8 v, bytes32 r, bytes32 s) = hevm.sign(sk, digest);
-
+        (uint8 v, bytes32 r, bytes32 s) = signPermit(sk, owner, spender, signVal, token.nonces(owner), deadline);
         token.permit(owner, spender, callVal, deadline, v, r, s);
     }
 
     function testFailPermitBadNonce(uint sk, address spender, uint nonce, uint val, uint time, uint deadline) public {
+        address owner = hevm.addr(sk);
         require(time > deadline);
+        require(nonce != token.nonces(owner));
         hevm.warp(time);
 
-        address owner = hevm.addr(sk);
-        require(nonce != token.nonces(owner));
-
-        bytes32 digest = keccak256(
-            abi.encodePacked(
-                "\x19\x01",
-                token.DOMAIN_SEPARATOR(),
-                keccak256(abi.encode(token.PERMIT_TYPEHASH(), owner, spender, val, nonce, deadline))
-            )
-        );
-        (uint8 v, bytes32 r, bytes32 s) = hevm.sign(sk, digest);
-
+        (uint8 v, bytes32 r, bytes32 s) = signPermit(sk, owner, spender, val, nonce, deadline);
         token.permit(owner, spender, val, deadline, v, r, s);
     }
 
     function testFailPermitBadOwner(uint sk, address owner, address spender, uint nonce, uint val, uint time, uint deadline) public {
+        require(owner != hevm.addr(sk));
         require(time > deadline);
         hevm.warp(time);
 
-        address signer = hevm.addr(sk);
-        require(signer != owner);
-
-        bytes32 digest = keccak256(
-            abi.encodePacked(
-                "\x19\x01",
-                token.DOMAIN_SEPARATOR(),
-                keccak256(abi.encode(token.PERMIT_TYPEHASH(), owner, spender, val, nonce, deadline))
-            )
-        );
-        (uint8 v, bytes32 r, bytes32 s) = hevm.sign(sk, digest);
-
+        (uint8 v, bytes32 r, bytes32 s) = signPermit(sk, owner, spender, val, token.nonces(owner), deadline);
         token.permit(owner, spender, val, deadline, v, r, s);
     }
 
@@ -214,19 +172,24 @@ contract TestToken is DSTest {
         hevm.warp(time);
 
         address owner = hevm.addr(sk);
-        bytes32 digest = keccak256(
-            abi.encodePacked(
-                "\x19\x01",
-                token.DOMAIN_SEPARATOR(),
-                keccak256(abi.encode(token.PERMIT_TYPEHASH(), owner, signSpend, val, nonce, deadline))
-            )
-        );
-        (uint8 v, bytes32 r, bytes32 s) = hevm.sign(sk, digest);
-
+        (uint8 v, bytes32 r, bytes32 s) = signPermit(sk, owner, signSpend, val, token.nonces(owner), deadline);
         token.permit(owner, callSpend, val, deadline, v, r, s);
     }
 
     // --- util ---
+
+    function signPermit(
+        uint sk, address owner, address spender, uint val, uint nonce, uint deadline
+    ) internal returns (uint8 v, bytes32 r, bytes32 s) {
+        bytes32 digest = keccak256(
+            abi.encodePacked(
+                "\x19\x01",
+                token.DOMAIN_SEPARATOR(),
+                keccak256(abi.encode(token.PERMIT_TYPEHASH(), owner, spender, val, nonce, deadline))
+            )
+        );
+        return hevm.sign(sk, digest);
+    }
 
     function approve(address src, address dst, uint amt) internal {
         hevm.store(
