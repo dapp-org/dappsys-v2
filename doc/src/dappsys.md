@@ -28,7 +28,7 @@ Wherever possible security properties have been verified formally.
 
 ### Standalone Contracts
 
-- `token.sol`: an erc20 token with authed mint / burn and [`permit`](https://eips.ethereum.org/EIPS/eip-2612)
+- [`token.sol`](./token.md): an erc20 token with authed mint / burn and [`permit`](https://eips.ethereum.org/EIPS/eip-2612)
 - `proxy.sol`: execute atomic transaction sequences from a persistent identity
 - `delay.sol`: a governance timelock delay
 - `value.sol`: an on chain beacon for off chain oracles

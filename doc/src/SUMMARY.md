@@ -7,3 +7,5 @@
   - [Math](./math.md)
   - [Move](./move.md)
   - [Lock](./lock.md)
+- [Standalone](./standalone.md)
+  - [Token](./token.md)
