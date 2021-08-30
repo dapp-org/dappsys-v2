@@ -455,20 +455,12 @@ methods, as well as <a href="https://eips.ethereum.org/EIPS/eip-2612"><code>EIP-
 delegation.</p>
 <p>The token is fully compliant with the <a href="https://eips.ethereum.org/EIPS/eip-20">ERC20 interface specification</a>.</p>
 <h2 id="semantics"><a class="header" href="#semantics">Semantics</a></h2>
-<p>In terms of semantics the token is designed to be minimally surprising and as such does not implement any of the following:</p>
 <ul>
-<li>blocklists</li>
-<li>admin controlled pause</li>
-<li>transfer fees</li>
-<li>reverts on transfers to or from the zero address</li>
-<li>reverts on approval to or from the zero address</li>
-<li>reverts on approvals when an non-zero approval is already in place</li>
-<li>reverts on zero value transfers</li>
-<li>reverts on large transfers / approvals</li>
+<li>The token is designed to be minimally surprising and avoids any additional checks or reverts that
+are not strictly essential for implementing the core transfer semantics.</li>
+<li>The token <code>decimals</code> is hardcoded to <code>18</code>.</li>
+<li>The token is immutable and cannot be upgraded once deployed.</li>
 </ul>
-<p>The token <code>decimals</code> is hardcoded to <code>18</code>.</p>
-<p>The token is immutable and cannot be upgraded once deployed.</p>
-<p>A call to <code>transferFrom(address(this), usr, amt)</code> is semantically exactly the same as a call to <code>transfer(usr, amt)</code>.</p>
 <h3 id="mintaddress-usr-uint-amt-auth"><a class="header" href="#mintaddress-usr-uint-amt-auth"><code>mint(address usr, uint amt) auth</code></a></h3>
 <ul>
 <li>Allows a ward of the token to mint <code>amt</code> tokens to <code>usr</code>.</li>
@@ -523,6 +515,12 @@ interactions involving the token without having to hold ether.</li>
 <li>It allows users to both approve a contract on their tokens and then have the contract pull those
 tokens in a single transaction.</li>
 </ul>
+<p><code>EIP-2612</code> adds 3 methods to the standard <code>ERC20</code> ABI:</p>
+<pre><code>function permit(address owner, address spender, uint value, uint deadline, uint8 v, bytes32 r, bytes32 s) external
+function nonces(address owner) external view returns (uint)
+function DOMAIN_SEPARATOR() external view returns (bytes32)
+</code></pre>
+<p>For a full description of the semantics, refer to the <a href="https://eips.ethereum.org/EIPS/eip-2612#specification">EIP</a>.</p>
 
                     </main>
 
