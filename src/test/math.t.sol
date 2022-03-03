@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.6;
 
-import {Math} from "../math.sol";
+import "../math.sol";
 import {DSTest} from "ds-test/test.sol";
 
-contract TestMath is Math, DSTest {
+contract TestMath is DSTest {
 
     // TODO: make these min / max tests symbolic once
     // https://github.com/dapphub/dapptools/issues/705 is fixed
@@ -57,9 +57,48 @@ contract TestMath is Math, DSTest {
         // avoid overflow
         uint x = _x % 45;
         uint n = _n % 45;
-        emit log_named_uint("x:", x);
-        emit log_named_uint("n:", n);
-
         assertEq(rpow(x, n, 1), x ** n);
+    }
+
+    function testWmulWW(Wad x, Wad y) public {
+        // ignore overflow
+        unchecked {
+            if (Wad.unwrap(y) == 0) return;
+            if (Wad.unwrap(x) * WAD / WAD != Wad.unwrap(x)) return;
+            if (Wad.unwrap(x) * Wad.unwrap(y) / Wad.unwrap(y) != Wad.unwrap(x)) return;
+        }
+
+        // if we ignore the last 80 bits then wmul and wdiv are inverses
+        uint precision = 80;
+
+        assertEq(
+            Wad.unwrap(wdiv(wmul(x, y), y)) >> precision,
+            Wad.unwrap(x) >> precision
+        );
+        assertEq(
+            Wad.unwrap(wmul(wdiv(x, y), y)) >> precision,
+            Wad.unwrap(x) >> precision
+        );
+    }
+
+    function testWmulGas(uint x, uint y) public {
+        // ignore overflow
+        unchecked { if (x * y / y != x) return; }
+
+        Wad xw = Wad.wrap(x);
+        Wad yw = Wad.wrap(y);
+
+        uint preGasTyped = gasleft();
+        Wad rw = wmul(xw, yw);
+        uint postGasTyped = gasleft();
+
+        uint preGasBare = gasleft();
+        uint rb = wmul_(x, y);
+        uint postGasBare = gasleft();
+
+        // results are the same
+        assertEq(Wad.unwrap(rw), rb);
+        // gas usage is identical
+        assertEq(postGasTyped - preGasTyped, postGasBare - preGasBare);
     }
 }
