@@ -18,34 +18,34 @@ contract TestMove is DSTest, Move {
     Hevm hevm = Hevm(HEVM_ADDRESS);
 
     // success with missing return value
-    function proveWithMissingReturn(address dst, uint amt) public {
+    function testWithMissingReturn(address dst, uint amt) public {
         verifyMove(address(missingReturn), dst, amt);
     }
-    function proveWithMissingReturn(address src, address dst, uint amt) public {
+    function testWithMissingReturn(address src, address dst, uint amt) public {
         verifyMove(address(missingReturn), src, dst, amt);
     }
 
     // success with OZ style transferFrom self semantics
-    function proveWithTransferFromSelf(address dst, uint amt) public {
+    function testWithTransferFromSelf(address dst, uint amt) public {
         verifyMove(address(transferFromSelf), dst, amt);
     }
-    function proveWithTransferFromSelf(address src, address dst, uint amt) public {
+    function testWithTransferFromSelf(address src, address dst, uint amt) public {
         verifyMove(address(transferFromSelf), src, dst, amt);
     }
 
     // success with standard erc20
-    function proveWithStandardERC20(address dst, uint amt) public {
+    function testWithStandardERC20(address dst, uint amt) public {
         verifyMove(address(erc20), dst, amt);
     }
-    function proveWithStandardERC20(address src, address dst, uint amt) public {
+    function testWithStandardERC20(address src, address dst, uint amt) public {
         verifyMove(address(erc20), src, dst, amt);
     }
 
     // always fails if token returns false
-    function proveFailWithReturnsFalse(address dst, uint amt) public {
+    function testFailWithReturnsFalse(address dst, uint amt) public {
         verifyMove(address(returnsFalse), dst, amt);
     }
-    function proveFailWithReturnsFalse(address src, address dst, uint amt) public {
+    function testFailWithReturnsFalse(address src, address dst, uint amt) public {
         verifyMove(address(returnsFalse), src, dst, amt);
     }
 
